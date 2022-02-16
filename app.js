@@ -29,13 +29,74 @@ app.get("/mean", function (req, res) {
       value: findMean(nums),
     });
   }
-})
+});
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
+app.get("/median", function (req, res) {
+  if (!req.query.nums) { throw new BadRequestError(MISSING); }
 
+  let nums = convertStrNums(req.query.nums);
+  console.log(nums);
+
+
+  if (nums.includes("is not a number")) {
+    throw new BadRequestError(`It's a bad request, ${nums}!`);
+  } else {
+
+    return res.json({
+      operation: "median",
+      value: findMedian(nums),
+    });
+  }
+});
 
 /** Finds mode of nums in qs: returns {operation: "mean", result } */
+app.get("/mode", function (req, res) {
+  if (!req.query.nums) { throw new BadRequestError(MISSING); }
 
+  let nums = convertStrNums(req.query.nums);
+  console.log(nums);
+
+
+  if (nums.includes("is not a number")) {
+    throw new BadRequestError(`It's a bad request, ${nums}!`);
+  } else {
+
+    return res.json({
+      operation: "mode",
+      value: findMode(nums),
+    });
+  }
+});
+
+/** Finds mean, median, mode of nums in qs: returns 
+ * response: {
+  operation: "all",
+  mean: 12
+  median: 10,
+  mode: 8
+} */
+
+app.get("/all", function (req, res) {
+  if (!req.query.nums) { throw new BadRequestError(MISSING); }
+
+  let nums = convertStrNums(req.query.nums);
+  console.log(nums);
+
+
+  if (nums.includes("is not a number")) {
+    throw new BadRequestError(`It's a bad request, ${nums}!`);
+
+  } else {
+
+    return res.json({
+      operation: "all",
+      mean: findMean(nums),
+      median: findMedian(nums),
+      mode: findMode(nums),
+    });
+  }
+});
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
 app.use(function (req, res, next) {
