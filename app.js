@@ -1,16 +1,31 @@
+"use strict";
 /** Simple demo Express app. */
 
 const express = require("express");
 const app = express();
-
+const { findMean, findMedian, findMode, } = require("./stats.js");
 // useful error class to throw
-const { NotFoundError } = require("./expressError");
+const { NotFoundError, BadRequestError } = require("./expressError");
+const { convertStrNums } = require("./utils.js");
 
 const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 
 /** Finds mean of nums in qs: returns {operation: "mean", result } */
+app.get("/mean", function (req, res) {
+  let nums = convertStrNums(req.params.nums);
 
+  if (nums === "Numbers are required") {
+    throw new BadRequestError("It's a bad request, numbers are required!");
+  } else if (nums.includes("is not a number")) {
+    throw new BadRequestError(`It's a bad request, ${nums}!`);
+  }
+
+  return res.json({
+    operation: "mean",
+    value: findMean(nums),
+  });
+})
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
 
