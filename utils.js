@@ -6,13 +6,13 @@ const { BadRequestError } = require("./expressError");
 function convertStrNums(strNums) {
   // if the conversion isn't successful, throw a BadRequestError and will
   // be handled in your route
-  if(!strNums) {
-    return "Numbers are required";
-  }
+
+  let splitNums = strNums.split(",");
+
   let convertedNums = [];
-  for(let item of strNums) {
+  for (let item of splitNums) {
     let num = Number(item);
-    if(num === NaN) {
+    if (isNaN(num)) {
       return `${item} is not a number`;
     } else {
       convertedNums.push(num);
